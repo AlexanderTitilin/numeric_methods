@@ -1,0 +1,296 @@
+\documentclass[14pt]{extarticle}
+\usepackage{fontspec}
+\usepackage[russian]{babel}
+\setmainfont{Times New Roman}
+\usepackage{amssymb}
+\usepackage{setspace}
+\usepackage{enumitem}
+\onehalfspacing
+\usepackage{amsmath}
+\usepackage{titlesec} 
+\usepackage{listings}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{url}
+\urlstyle{same}
+\usepackage{longtable}
+\usepackage{titlesec}
+\usepackage{indentfirst}
+\usepackage[backend=biber, style=numeric,sorting=none]{biblatex}
+\DeclareFieldFormat{labelnumberwidth}{#1\adddot}
+\DeclareFieldFormat{urldate}{(дата обращения\space#1)}
+\DeclareFieldFormat{title}{#1\addcolon}
+\setlength{\biblabelsep}{5pt}
+\addbibresource{bibl.bib}
+\bibliography{sample}
+\usepackage{csquotes}
+% \setcounter{page}{2} 
+\setlength{\parindent}{1.25cm}
+\usepackage[right=10mm,left=30mm,top=20mm,bottom=20mm]{geometry}
+\titleformat{\section} {\normalfont\Large\bfseries}{\thesection. }{0em}{\centering} 
+\titleformat{\subsection } {\normalfont\Large\bfseries}{\thesubsection }{0.5em}{\centering} 
+\titleformat{\subsubsection } {\normalfont\Large\bfseries}{\thesubsubsection }{0.5em}{\centering} 
+\setlist[enumerate,1]{label=\arabic*)}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5} \definecolor{codepurple}{rgb}{0.58,0,0.82} \definecolor{backcolour}{rgb}{0.95,0.95,0.92} \lstdefinestyle{mystyle}{
+	backgroundcolor=\color{backcolour},
+	commentstyle=\color{codegreen},
+	keywordstyle=\color{magenta},
+	numberstyle=\tiny\color{codegray},
+	stringstyle=\color{codepurple},
+	basicstyle=\ttfamily\footnotesize,
+	breakatwhitespace=false,
+	breaklines=true,
+	captionpos=b,
+	showspaces=false,
+	showstringspaces=false,
+	showtabs=false,
+	tabsize=2
+}
+
+\lstset{style=mystyle}
+
+\title{}
+\author{}
+\date{}
+\begin{document}
+\begin{titlepage}
+\begin{tikzpicture}[remember picture, overlay] \node[anchor=north west] at (current page.north west) {\includegraphics[scale=0.35]{logo.jpg}}; \end{tikzpicture} 
+    \begin{center}
+        МИНОБРНАУКИ РОССИИ \\
+        Федеральное государственное бюджетное образовательное учреждение \\
+        высшего образования \\
+        «САНКТ-ПЕТЕРБУРГСКИЙ ГОСУДАРСТВЕННЫЙ \\
+        ЭКОНОМИЧЕСКИЙ УНИВЕРСИТЕТ» \\
+        
+        \vspace{0.5cm}
+        
+        Факультет информатики и прикладной математики
+        \vspace{0.5cm}\\
+        Кафедра прикладной математики и экономико-математических методов
+        
+        \vspace{0.5cm}
+        \vspace*{0.5cm}
+        
+        \textbf{КУРСОВАЯ РАБОТА}\\
+        по дисциплине: \\
+        \textbf{«Численные методы»}\\
+        \vspace*{0.5cm}
+        Тема:
+        <<Реализация и сравнение стационарных итерационных методов решения СЛАУ>>\\
+    \end{center}
+        Направление ~~ 01.03.02 <<Прикладная Математика и Информатика>>\\ 
+        Направленность ~~  << Прикладная математика и информатика в экономике
+        и управлении>>\\
+        Обучающийся~ Титилин Александр Михайлович   \\
+        Группа ~~ ПМ-2201 \hspace{6.5cm}
+        Подпись  \underline{\hspace{4cm}}
+        \vspace{1cm}\\
+        Проверила~ Соловьёва Наталья Анатольевна\\
+        Должность~ к.ф.-м.н., доцент
+        \vspace{0.5cm}\\
+        Оценка:\underline{\hspace{5cm}} \hspace{3cm} Дата: \underline{\hspace{3cm}}
+        \vspace{0.5cm}\\
+        Подпись: \underline{\hspace{3cm}}
+        % \vspace{0.5cm}\\
+    \begin{center}
+        Санкт-Петербург\\
+       2024 г.
+    \end{center}
+\end{titlepage}
+\setcounter{page}{2}
+    \tableofcontents{}
+    \pagebreak{}
+    \section*{ВВЕДЕНИЕ}
+    \addcontentsline{toc}{section}{ВВЕДЕНИЕ}
+    Целью курсовой работы является реализация итерационных
+    алгоритмов решения систем линейных уравнений с использованием
+    языка программирования Python.\\
+    Задачи курсовой работы:
+    \begin{enumerate}
+        % \item создание алгоритмов, реализующих итерационные методы решения СЛАУ;
+        \item реализация алгоритмов решения СЛАУ с помощью итерационных методов;
+        \item создание алгоритмов генерации случайных матриц с необходимыми свойствами;
+        \item сравнение времени работы и точности алгоритмов между собой и с прямыми методами;
+        \item визуализация сравнений алгоритмов.
+    \end{enumerate}
+    \pagebreak
+    \section{ИТЕРАЦИОННЫЕ СТАЦИОНАРНЫЕ ОДНОШАГОВЫЕ МЕТОДЫ РЕШЕНИЯ СЛАУ}
+    Пусть дана СЛАУ вида $Ax = b$, где  $A$ квадратная невырожденная матрица порядка $n$,
+     $b$ столбец длины $n$,  $x$ неизвестный столбец.
+
+     Обозначим $x^{(i)}$ $i$-е приближение к точному решению СЛАУ.  $T$ -- оператор перехода,
+     отображение, которое переводит приближение в следующее
+      \[
+     x^{(i + 1)} \leftarrow T(x^{(i)})
+     .\] 
+
+     Все рассмотренные далее методы будут реализовывать процесс последовательного применения оператора перехода, начиная
+     с некоторого начального приближения.
+     \subsection{Итерационный метод Якоби}
+     Рассмотрим данный оператор перехода
+     \[
+     T(x^{(k)}) = \begin{pmatrix} 
+     T_1(x^{(k)}) \\
+     T_2(x^{(k)})\\
+     \vdots\\
+     T_{n}(x^{(k)})
+     \end{pmatrix} 
+     ,\] 
+     где
+     \[
+     T_{i}(x^{k}) = \frac{1}{a_{ii}} (b_{i} - \sum_{j \neq i} a_{ij}x^{(k)}_{j}) ,i = 1\dots n
+     .\] 
+     В листинге \ref{jacobi} представлена реализация данного метода на языке программирования Python.
+     \lstinputlisting[language=Python,caption=Реализация метода Якоби. , label={jacobi}]{code/jacobi.py}
+     Метод Якоби сходится при любом начальном приближении, если матрица $A$ в СЛАУ  $Ax=b$ 
+     имеет диагональное преобладание \cite{book}.
+     \subsection{Итерационный метод Гаусса-Зейделя}
+     Рассмотрим оператор перехода
+     \[
+     T_{i}(x^{(k)}) = \frac{1}{a_{11}} (b_{i} - \sum_{j=1}^{i-1} a_{ii} x_{j}^{(k+1)} - \sum_{j=i+1}^{n} a_{ii} x_{j}^{(k)})
+     .\] 
+     В листинге \ref{gsl} представлена реализация данного метода.
+     \lstinputlisting[language=Python,caption=Реализация метода Гаусса-Зейделя., label={gsl}]{code/gauss_seildel.py}
+     Метод Гаусса-Зейделя исправляет недостаток метода Якоби, который не использовал уже вычисленные 
+     значения приближения $x^{(k+1)}$. 
+
+     Метод Гаусса-Зейделя сходится из любого начального приближения, если матрица $A$ в СЛАУ
+     $Ax= b$ имеет диагональное преобладание или является симметричной и положительно определенной \cite{book}.
+      \subsection{Методы релаксации}
+      Рассмотрим оператор перехода 
+      \[
+      T_{i}(x^{(k)}) = (1- \omega) x_{i}^{(k)} + \frac{\omega}{a_{ii}}
+      (b_{i} - \sum_{j=1}^{i-1}) (b_{i} - \sum_{j=1}^{i-1} a_{ij} x_{j}^{(k+1)} -
+      \sum_{j=i+1} a_{ij} x_{j}^{(k)}), ~
+      \text{где}~ \omega \in \mathbb{R}
+      .\] 
+      Число $\omega$ называется параметром релаксации. В листинге \ref{rel} представлена реализация данного метода.
+      \lstinputlisting[label={rel},language=Python,caption=Реализация метода релаксации]{code/relaxation.py}
+      Для сходимости метода релаксации должно выполнятся неравенство $0<\omega<2$.
+      Методы релаксации сходятся из любого начального приближения, если матрица  $A$ в СЛАУ 
+      $Ax=b$  положительно определенная \cite{book}. 
+\subsection{Метод Ричардсона}
+Рассмотрим оператор перехода
+\[
+    T(x^{(k)}) = (E - \tau A) x^{(k)} + \tau b, ~ \text{где} ~ \tau = \text{const}, \tau \neq 0
+.\] 
+В листинге \ref{r} представлена реализация данного метода.
+\lstinputlisting[label={r},language=Python, caption=Реализация метода Ричарсона]{code/richardson.py}
+Если в СЛАУ $Ax = b$ матрица  $A$ симметрична, положительно определена , то последовательность, порожденная методом Ричардсона с параметром
+$\tau = \frac{2}{M + \mu}, M>0,\mu>0$, где $M,\mu$ границы спектра матрицы $A$, сходится из любого начального приближения \cite{book}.
+\pagebreak
+\section{СРАВНЕНИЕ АЛГОРИТМОВ}
+\subsection{Особенности реализации алгоритмов}
+У выбранного языка программирования есть ряд недостатков. Он очень медленный 
+в математических задачах и не имеет встроенной поддержки матриц и функций линейной алгебры.
+Для решения этих проблем используются сторонние библиотеки.
+
+Список сторонних библиотек:
+\begin{enumerate}
+    \item numpy --  содержит реализации векторов и матриц \cite{numpy};
+    \item scipy --  содержит реализации функций линейной алгебры \cite{scipy};
+    \item numba -- реализует компиляцию, что необходимо для ускорения вычислений \cite{numba};
+    \item pandas -- содержит реализацию таблиц, что необходимо для визуализации результатов сравнений \cite{pandas}.
+\end{enumerate}
+\subsection{Генерация случайных матриц}
+Для проведения сравнений необходимы матрицы, состоящие из случайных чисел.
+Данные матрицы должны иметь диагональное преобладание или
+быть симметричными и положительно определенными.
+
+Рассмотрим функции для генерации случайной матрицы с диагональным преобладанием порядка $n$, представленный в листинге \ref{gen1}.
+Данный алгоритм достаточно быстро создает матрицы, итерационные методы в применении
+к данным матрицам быстро сходятся.
+\lstinputlisting[label={gen1},language=Python,caption=Генерация случайных матриц с диагональным преобладанием.]{code/generate_dominate_row.py}
+
+Рассмотрим функцию для генерации случайной 
+симметричной и положительно определенной матрицы, представленную в листинге \ref{gen2}.
+Данный алгоритм начинает работать медленно на матрицах порядка больше 1000,
+но более быстрые алгоритмы создания таких матриц,
+создают матрицы, итерационные методы в применении к которым сходятся 
+более медленно.
+\lstinputlisting[label={gen2}, language=Python,
+caption=Генерация случайных симметричных и положительно определенных матриц.]{code/sym_pos.py}
+\subsection{Сравнение алгоритмов решения СЛАУ с матрицей, имеющей диагональное преобладание}\label{diag}
+\subsubsection{Сравнение времени работы алгоритмов}
+Алгоритм сравнения алгоритмов:
+\begin{enumerate}
+    \item создаются случайные квадратные матрицы, имеющие диагональное преобладание, порядка $100,200,\dots,5100$;
+    \item  создаются случайные векторы размера $100,200,\dots,5100$;
+    \item решаются СЛАУ точным методом, запоминаются решения и затраченное время;
+    \item СЛАУ решаются методом Якоби, Гаусса-Зейделя и релаксации с параметром $\omega = 0.3,0.5,1.2$, с компиляцией и без, запоминается затраченное время;
+\end{enumerate}
+Как можно заметить из таблиц \ref{d1} -- \ref{d10}, самым эффективным является метод Гаусса-Зейделя,
+для которого компиляция ускоряет код в 4.5 раза.
+\input{tables/jacobi_diagonal_dominate.tex}
+\input{tables/compiled_jacobi_diagonal_dominate.tex}
+\input{tables/gauss_seildel_diagonal_dominate.tex}
+\input{tables/compiled_gauss_seildel_diagonal_dominate.tex}
+\input{tables/relaxation03_diagonal_dominate.tex}
+\input{tables/сompiled_relaxation03_diagonal_dominate.tex}
+\input{tables/relaxation05_diagonal_dominate.tex}
+\input{tables/compiled_relaxation05_diagonal_dominate.tex}
+\input{tables/relaxation12_diagonal_dominate.tex}
+\input{tables/compiled_relaxation12_diagonal_dominate.tex}
+\subsubsection{Сравнение точности}
+Сравнение точности будет производиться в два этапа на примере СЛАУ с матрицей 
+порядка $2000$. На первом этапе ищется невязка решения.
+На втором сравнивается относительная погрешность решения
+с относительной погрешностью возмущенной системы,
+то есть системы, полученной путем прибавления  $0.001$ к каждому коэффициенту 
+каждого уравнения включая свободный член.
+
+Как можно заметить из таблиц 
+\ref{res} и \ref{errs}, самым точным является метод Гаусса-Зейделя.
+\input{tables/resuiduls.tex}
+\input{tables/errors.tex}
+\subsection{Сравнение алгоритмов решения СЛАУ с симметричной и положительно определенной матрицей}
+Все сравнения будут производиться
+на случайных симметричных
+положительно определенных матрицах и матрицах Гилберта \cite{book} , которые являются плохо обусловленными.
+
+Алгоритмы сравнения времени работы и точности  аналогичны алгоритмам использованным в пункте \ref{diag}.
+\subsubsection{Сравнение времени работы алгоритмов на случайных симметричных положительно определенных матрицах}
+Из таблиц \ref{gsSympos} -- \ref{rich} можно заметить,
+что самым быстрым является метод Гаусса-Зейделя, метод Ричардсона является самым медленным.
+\input{tables/gauss-seildel_sym_pos.tex}
+\input{tables/relaxation_12_sym_pos.tex}
+\input{tables/relaxation_15_sym_pos.tex}
+\input{tables/richardon_sym_pos.tex}
+\pagebreak
+\subsubsection{Сравнение точности}
+Как можно заметить из таблиц \ref{res1} и \ref{errs1}, самым точным методом является метод Гаусса-Зейделя.
+Точность заметно ниже, чем при решении СЛАУ с матрицей с диагональным преобладанием.
+
+\input{tables/resuiduls_sympos.tex}
+\input{tables/errors_sympos.tex}
+\subsubsection{Сравнение времени работы алгоритмов на матрицах Гилберта}
+Из таблиц \ref{gil1} -- \ref{rich_hilbert} можно заметить, что все методы работают на матрицах Гилберта очень медленно, но метод Гаусса-Зейделя быстрее остальных.
+\input{tables/gauss_seildel_hilbert.tex}
+\input{tables/relaxation_12_hilbert.tex}
+\input{tables/relaxation_15_hilbert.tex}
+\input{tables/richardson_hilbert.tex}
+\subsubsection{Сравнение точности}
+Матрицы Гилберта являются плохо обусловленными, что 
+видно из таблиц \ref{resHilbert}, \ref{errsHilbert}. Поэтому итерационные методы СЛАУ не дали результата.
+\input{tables/resuiduls_hilbert.tex}
+\input{tables/errors_hilbert.tex}
+\pagebreak
+\section*{ЗАКЛЮЧЕНИЕ}
+    \addcontentsline{toc}{section}{ЗАКЛЮЧЕНИЕ}
+    Все задачи курсовой работы были выполнены, но эту работу можно дополнить. Например:
+    \begin{enumerate}
+        \item переписать на более эффективный язык программирования, сравнить эффективность;
+        \item создать более эффективный алгоритм генерации симметричных, положительно определенных матриц;
+        \item провести расчеты на более производительном персональном компютере;
+        \item провести расчеты на видеокарте, сравнить эффективность;
+        \item реализовать другие итерационные методы решения СЛАУ.
+    \end{enumerate}
+    \pagebreak
+    \printbibliography[title=БИБЛИОГРАФИЧЕСКИЙ СПИСОК]
+\addcontentsline{toc}{section}{БИБЛИОГРАФИЧЕСКИЙ СПИСОК}
+\end{document} 
+
